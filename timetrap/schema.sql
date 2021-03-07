@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS time;
+
+CREATE TABLE time (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    start TIMESTAMP NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP, 'localtime')),
+    stop TIMESTAMP,
+    ticket TEXT NOT NULL,
+    comment TEXT
+);
