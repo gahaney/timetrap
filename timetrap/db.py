@@ -33,15 +33,18 @@ class db(object):
     self.cur.execute("select * from time where stop is null")
     count = self.cur.fetchone()
     if count==None:
-      self.cur.execute("INSERT INTO time (ticket, comment) VALUES (?, ?)", (ticket, comment))
+      self.cur.execute("insert into time (ticket, comment) values (?, ?)", (ticket, comment))
     else:
       print("You must stop tracking your current ticket first")
 
   def show(self):
-    self.cur.execute("select ticket, start, stop, comment from time")
+    self.cur.execute("select id, ticket, start, stop, round((julianday(stop) - julianday(start)) * 24 * 60,0), comment from time")
     rows = self.cur.fetchall()
     return rows
 
   def stop(self):
     self.cur.execute("update time set stop = datetime(CURRENT_TIMESTAMP, 'localtime') where stop is null")
     rows = self.cur.fetchall()
+
+  def delete(self, id):
+    self.cur.execute("delete from time where id = (?)", id)

@@ -4,7 +4,7 @@ import argparse
 sys.path.append('./timetrap')
 from db import db 
 
-commands =['start', 'stop', 'pause', 'init', 'flush', 'post', 'show']
+commands =['start', 'stop', 'pause', 'init', 'flush', 'post', 'show', 'delete']
 parser = argparse.ArgumentParser()
 subparser = parser.add_subparsers(dest='command', required=True)
 for command in commands:
@@ -15,11 +15,14 @@ start.add_argument('-c', '--comment', type=str)
 
 stop.add_argument('-c', '--comment', type=str)
 
+delete.add_argument('-i', '--id', type=str, required=True)
+
 args = parser.parse_args()
 
 command = args.command
 if args.command in ['start']: ticket = args.ticket
 if args.command in ['start', 'stop']: comment = args.comment
+if args.command in ['delete']: id = args.id
 
 with db() as db:
   if command=='start':
@@ -32,3 +35,5 @@ with db() as db:
     time = db.show()
     for row in time:
       print(row)
+  elif command=='delete':
+    db.delete(id)
